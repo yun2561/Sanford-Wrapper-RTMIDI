@@ -1,0 +1,83 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <!-- Do not compile **/obj/**/*.cs from subfolders (leftover from old split projects). -->
+    <DefaultItemExcludes>$(DefaultItemExcludes);**/obj/**;**/bin/**</DefaultItemExcludes>
+    <!-- net20/net35 require .NET Framework 3.5 SP1 + MSBuild.Tasks.v3.5 (often missing on modern dev machines). -->
+    <TargetFrameworks>net40;net45;net452;net461;net48;net8.0-windows;net6.0-windows</TargetFrameworks>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Sanford.Multimedia.Midi</RootNamespace>
+    <AssemblyName>Sanford.Multimedia.Midi</AssemblyName>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\Sanford.Multimedia.Midi.xml</DocumentationFile>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+
+    <PackageId>Sanford.Multimedia.Midi</PackageId>
+    <Version>6.8.0.0</Version>
+    <Authors>Leslie Sanford;Tebjan Halm;Andreas Grimme;Andres Fernandez de Prado</Authors>
+    <Company>Leslie Sanford</Company>
+    <Description>A toolkit for creating MIDI applications with .NET.</Description>
+    <PackageProjectUrl>http://www.codeproject.com/Articles/6228/C-MIDI-Toolkit</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/tebjan/Sanford.Multimedia.Midi</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageIcon>Icon_-_General_MIDI.png</PackageIcon>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageReleaseNotes>MIDI messages now include driver timestamps. Includes PPQM fixes, improved SysEx handling, and performance/stability improvements for modern 64-bit Windows.</PackageReleaseNotes>
+    <PackageTags>midi;music;audio</PackageTags>
+    <Copyright>Leslie Sanford 2006</Copyright>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <!-- 32-bit PE: matches x86 host and rtmidi32.dll (RtMidi C API). -->
+    <Platforms>x86</Platforms>
+    <PlatformTarget>x86</PlatformTarget>
+    <FileVersion>6.8.0.0</FileVersion>
+    <AssemblyVersion>6.8.0.0</AssemblyVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <Optimize>false</Optimize>
+    <DebugType>portable</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>portable</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net8.0-windows' Or '$(TargetFramework)' == 'net6.0-windows'">
+    <UseWindowsForms>true</UseWindowsForms>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net8.0-windows' Or '$(TargetFramework)' == 'net6.0-windows'">
+    <AssemblyAttribute Include="System.Runtime.Versioning.SupportedOSPlatformAttribute">
+      <_Parameter1>windows</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETFramework'">
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFrameworkIdentifier)' == '.NETFramework'">
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md" Pack="true" PackagePath="\" />
+    <None Include="..\Icon_-_General_MIDI.png" Pack="true" PackagePath="\" Condition="Exists('..\Icon_-_General_MIDI.png')" />
+  </ItemGroup>
+
+  <!-- When present, copy 32-bit RtMidi next to Sanford.Multimedia.Midi.dll (required for MIDI I/O). -->
+  <ItemGroup>
+    <None Include="Sanford.Multimedia.Midi\Native\rtmidi32.dll" Condition="Exists('Sanford.Multimedia.Midi\Native\rtmidi32.dll')">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+</Project>

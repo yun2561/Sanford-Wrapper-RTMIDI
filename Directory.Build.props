@@ -1,0 +1,8 @@
+<Project>
+  <PropertyGroup>
+    <!-- Default when no -c /p:Configuration is passed; solution is Debug-only for now. -->
+    <Configuration Condition="'$(Configuration)' == ''">Debug</Configuration>
+    <!-- Default to x86 so Sanford.Multimedia.Midi.dll and demos load as 32-bit. -->
+    <Platform Condition="'$(Platform)' == ''">x86</Platform>
+  </PropertyGroup>
+</Project>

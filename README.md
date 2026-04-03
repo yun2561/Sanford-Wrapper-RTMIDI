@@ -1,2 +1,29 @@
-# Sanford-Wrapper-RTMIDI
-Sanford Wrapper RTMIDI
+Sanford.Multimedia.Midi
+=======================
+
+[![NuGet version](https://img.shields.io/nuget/v/Sanford.Multimedia.Midi.svg)](https://www.nuget.org/packages/Sanford.Multimedia.Midi/)
+
+This is all source code of the C# MIDI toolkit from CodeProject by Leslie Sanford.
+
+Improvements:
+- 64-bit compatible
+- Windows 8 and 10 compatible
+- Mono framework compatible on Windows
+- Does not require additional assemblies
+- Faster midi file reading in Release build
+
+Also avaliable on Nuget.org
+
+    PM> Install-Package Sanford.Multimedia.Midi
+
+Calling from **LabVIEW** (.NET): if you see *“The loaded .NET assembly was not found in its original directory”*, remove and re-add the assembly reference (LabVIEW stores the original path). See `Source/Sanford.Multimedia.Midi/Native/LabVIEW.txt` for bitness (32-bit LabVIEW matches the default x86 build) and deployment notes.
+
+If you have any improvement or fix to this library, please don't hesitate to make a fork and open a pull request.
+
+MIT License
+
+Credits:
+
+http://www.codeproject.com/Articles/6228/C-MIDI-Toolkit
+
+https://code.google.com/p/vsticks/

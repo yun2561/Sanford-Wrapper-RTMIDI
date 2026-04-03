@@ -1,0 +1,43 @@
+LabVIEW .NET 调用 Sanford.Multimedia.Midi.dll
+==========================================
+
+一、提示 “The loaded .NET assembly was not found in its original directory.”
+
+含义：当前加载到的程序集所在路径，与你在 VI 里保存 .NET 引用时记录的路径不一致。
+
+常见原因：
+  - 工程或输出目录移动、改名
+  - 重新生成后 DLL 到了别的 bin 路径（例如从 Debug 换到另一台机器路径）
+
+处理（任选）：
+  1) 在 Block Diagram 上删除该 .NET 构造器/调用节点关联的程序集引用
+  2) 在 “互连接口” → .NET 程序集 中移除 Sanford.Multimedia.Midi
+  3) 重新 “浏览” 添加 Sanford.Multimedia.Midi.dll（指向你**现在**要使用的固定目录下的 DLL）
+  4) 建议：把运行所需的文件复制到**固定部署目录**（例如 C:\Libs\Midi\），VI 始终引用该路径，避免随工程输出路径变化
+
+二、位数必须一致（重要）
+
+当前仓库中的 Sanford.Multimedia.Midi 工程为 **x86（32 位）** 托管 DLL，且配合 **rtmidi32.dll**。
+
+  - 必须使用 **32 位 LabVIEW** 加载该程序集。
+  - **64 位 LabVIEW** 无法加载 32 位 .NET 程序集；若必须用 64 位 LabVIEW，需要单独生成 **x64 / AnyCPU（64 位）** 的托管 DLL 与对应 64 位 RtMidi 本机库（与本仓库当前默认配置不同）。
+
+三、与 DLL 同目录的文件（运行时）
+
+与 Sanford.Multimedia.Midi.dll 放在同一目录（或 LabVIEW 能找到的目录）：
+  - Sanford.Multimedia.Midi.dll
+  - rtmidi32.dll（32 位 RtMidi）
+  - 若仍报 0x8007007E / 依赖缺失：安装 VC++ **x86** 运行库，或用 Dependencies 工具检查 rtmidi32.dll 的依赖并一并复制
+
+四、.NET Framework
+
+使用面向 **net48**（或其它 .NET Framework）生成的 DLL 时，目标机器需安装对应 **.NET Framework**（例如 4.8）。LabVIEW 版本与所支持的 CLR 请参考 NI 文档。
+
+---
+English (short)
+
+“The loaded .NET assembly was not found in its original directory” means LabVIEW’s saved reference path no longer matches where the DLL is now. Remove and re-add the .NET assembly reference; prefer a stable deployment folder.
+
+This build is **32-bit (x86)** — use **32-bit LabVIEW** or rebuild the library for **x64** to match 64-bit LabVIEW.
+
+Place **rtmidi32.dll** next to **Sanford.Multimedia.Midi.dll** at runtime.
